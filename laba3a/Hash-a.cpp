@@ -37,8 +37,8 @@
 		}
 		N = 0;
 
-		if (count > sztab && count < 0)
-			throw std::runtime_error("Invalid quantity of vector");
+		if (count > sztab || count < 0)
+			throw std::runtime_error("Invalid parametr");
 		int m, l;
 		while (N < count)
 		{
@@ -79,8 +79,6 @@
 
 	int Hash::find(int k) //поиск элемента таблицы по ключу
 	{
-		std::cout << " N="<<N;
-		
 			int it = 0; //количество итераций
 			int j = k % sztab;
 			
@@ -88,7 +86,6 @@
 			{
 				while ((tab[j].busy == 1) && (it < sztab))
 				{
-					std::cout << " FLAG#" << it << " item#" << tab[j].key;
 					if ((tab[j].busy == 1) && (tab[j].key == k))
 						return j;
 					j = (j + step);
@@ -103,6 +100,9 @@
 	{
 		if (find(k) > -1)
 			throw std::runtime_error("This item already exists");
+
+		if (k <= 0)
+			throw std::runtime_error("Invalid parametr");
 
 		int it = 0; //количество итераций
 		int j = k % sztab;
