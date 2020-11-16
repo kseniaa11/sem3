@@ -1,4 +1,4 @@
-#include "Hash-a.h"
+#include "Hash-c.h"
 #include <stdio.h>
 #include <iostream>
 
@@ -37,20 +37,36 @@
 		}
 		N = 0;
 
-		if (count > sztab || count < 0)
-			throw std::runtime_error("Invalid parametr");
+		if (count > sztab && count < 0)
+			throw std::runtime_error("Invalid quantity of vector");
 		int m, l;
+		
 		while (N < count)
 		{
 			m = rand() % sztab;
 			l = rand() % sztab;
+			struct Item dob;
+			dob.key = mas1[m];
+			for (int s = 0; s < szinfo; s++)
+				dob.info[s] = mas2[l][s];
 			try {
-				add(mas1[m], mas2[l]);
+				*this += dob;
 			}
 				catch (std::exception& ex) {
 					std::cout << ex.what() << std::endl;
 			}
 		}
+	}
+
+
+	std::istream& operator >> (std::istream& c, struct Item& el) //ввод элемента таблицы с входного потока 
+	{
+		std::cout << "Enter the key:\n";
+		number(el.key);
+		std::cout << "Enter the information:\n";
+		c >> el.info;
+		el.busy = 1;
+		return c;
 	}
 
 	struct Item Hash::conItem() //создание экземпл€ров структуры(элемента таблицы) с инициализацией начальным состо€нием по умолчанию;
@@ -65,27 +81,20 @@
 
 	}
 
-	struct Item Hash::getEl(struct Item& el)
+	std::ostream& operator << (std::ostream& c, const Hash& h) // вывод таблицы в выходной поток
 	{
-		std::cout << "Enter the key:\n";
-		number(el.key);
-		std::cout << "Enter the information:\n";
-		std::cin >> el.info;
-		return el;
-	}
-	void Hash::printHash() // вывод таблицы в выходной поток
-	{
-
-		std::cout << "Busy\tKey\tInfo\n";
-		if (N == 0)
+		c << "Busy\tKey\tInfo\n";
+		if (h.N == 0)
 			throw std::runtime_error("There aren`t items");
 		for (int i = 0; i < sztab; i++)
-			std::cout << tab[i].busy << "\t" << tab[i].key << "\t" << tab[i].info << "\n";
-		return;
+			c << h.tab[i].busy << "\t" << h.tab[i].key << "\t" << h.tab[i].info << "\n";
+		return c;
 	}
 
-	int Hash::find(int k) //поиск элемента таблицы по ключу
+	int Hash::operator ()(int k) //поиск элемента таблицы по ключу
 	{
+		//std::cout << " N="<<N;
+		
 			int it = 0; //количество итераций
 			int j = k % sztab;
 			
@@ -93,6 +102,7 @@
 			{
 				while ((tab[j].busy == 1) && (it < sztab))
 				{
+					//std::cout << " FLAG#" << it << " item#" << tab[j].key;
 					if ((tab[j].busy == 1) && (tab[j].key == k))
 						return j;
 					j = (j + step);
@@ -103,16 +113,14 @@
 		return -1;
 	}
 
-	void Hash::add(int k,  const char* inf) //добавление элемента в таблицу
+	Hash& Hash::operator +=(struct Item NOV) //добавление элемента в таблицу
 	{
-		if (find(k) > -1)
+		int l = (*this)(NOV.key);
+		if ( l > -1)
 			throw std::runtime_error("This item already exists");
 
-		if (k <= 0)
-			throw std::runtime_error("Invalid parametr");
-
 		int it = 0; //количество итераций
-		int j = k % sztab;
+		int j = NOV.key % sztab;
 
 		while ((tab[j].busy == 1) && (it < sztab))
 		{
@@ -122,18 +130,18 @@
 		 
 		if (it >= sztab)
 			throw std::runtime_error("Vector overflow");
-		tab[j].key = k;
+		tab[j].key = NOV.key;
 		tab[j].busy = 1;
 		for (int s=0;s<szinfo;s++)
-			tab[j].info[s] = inf[s];
+			tab[j].info[s] = NOV.info[s];
 		
 		N = N + 1;
-		return;
+		return *this;
 	}
 
-	struct Item Hash::getinfo(int k)// выборка информации из таблицы по заданному ключу
+	struct Item Hash::operator [](int k)// выборка информации из таблицы по заданному ключу
 	{
-		int index = find(k);
+		int index = (*this)(k);
 		if (index == -1)
 			throw std::runtime_error("This item doean`t exist");
 		else
@@ -141,9 +149,9 @@
 
 	}
 
-	void Hash::del(int k) //удаление элемента из таблицы(с отметкой в поле зан€тости) по ключу
+	void Hash::operator -=(int k) //удаление элемента из таблицы(с отметкой в поле зан€тости) по ключу
 	{
-		int index = find(k);
+		int index = (*this)(k);
 		if (index == -1)
 			throw std::runtime_error("This item doesn`t exist");
 		tab[index].busy = 0;
@@ -160,7 +168,11 @@
 		{
 			if (tab[i].busy == 1)
 			{
-				nov.add(tab[i].key, tab[i].info);
+				struct Item dob;
+				dob.key = tab[i].key;
+				for (int s = 0; s < szinfo; s++)
+					dob.info[s] = tab[i].info[s];
+				nov += dob;
 				j = j + 1;
 			}
 			i = i + 1;
