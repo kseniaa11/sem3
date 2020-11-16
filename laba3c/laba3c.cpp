@@ -52,10 +52,9 @@
             switch (dia)
             {
             case 1:
-                struct Item dob;
-                std::cin >> dob;
+                std::cin >> h;
                 try {
-                    h += dob;
+                    h += h.pre;
                 }
                 catch (std::exception& ex) {
                     std::cout << ex.what() << std::endl;

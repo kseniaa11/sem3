@@ -59,13 +59,13 @@
 	}
 
 
-	std::istream& operator >> (std::istream& c, struct Item& el) //ввод элемента таблицы с входного потока 
+	std::istream& operator >> (std::istream& c, Hash& el) //ввод элемента таблицы с входного потока 
 	{
 		std::cout << "Enter the key:\n";
-		number(el.key);
+		number(el.pre.key);
 		std::cout << "Enter the information:\n";
-		c >> el.info;
-		el.busy = 1;
+		c >> el.pre.info;
+		el.pre.busy = 1;
 		return c;
 	}
 
