@@ -1,7 +1,7 @@
-#include "Hash-c.h"
+#include "Hash-b.h"
 #include <stdio.h>
 #include <iostream>
-
+#include <time.h>
 
 
 
@@ -31,6 +31,9 @@
 
 	Hash::Hash(int count) //создание экземпл€ров класса(таблицы) с инициализацией заданным количеством элементов из массива ключей и информации;
 	{
+		int mas1[sztab] = { 17,21,34,55,67,78,3,42,39,8,10,46,82,5,99 };
+		const char* mas2[sztab] = { "abcde","fghij","klmno","pqrst", "uvwxy","z0123", "45678","9ABCD", "EFGHI","JKLMN", "OPQRS","TUVWX", "YZ987","65432","10abc" };
+
 		for (int i = 0; i < sztab; i++)
 		{
 			tab[i] = conItem();
@@ -43,6 +46,7 @@
 		
 		while (N < count)
 		{
+			srand(time(0));
 			m = rand() % sztab;
 			l = rand() % sztab;
 			struct Item dob;
@@ -53,8 +57,6 @@
 				*this += dob;
 			}
 				catch (std::exception& ex) {
-					std::cout << ex.what() << std::endl;
-			}
 		}
 	}
 
@@ -100,7 +102,7 @@
 			
 			if (tab[j].busy == 1)
 			{
-				while ((tab[j].busy == 1) && (it < sztab))
+				while ((tab[j].busy != 0) && (it < sztab))
 				{
 					//std::cout << " FLAG#" << it << " item#" << tab[j].key;
 					if ((tab[j].busy == 1) && (tab[j].key == k))
@@ -154,9 +156,8 @@
 		int index = (*this)(k);
 		if (index == -1)
 			throw std::runtime_error("This item doesn`t exist");
-		tab[index].busy = 0;
+		tab[index].busy = -1;
 		N = N - 1;
-		*this = reorg();
 		return;
 	}
 

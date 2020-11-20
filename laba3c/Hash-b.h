@@ -14,7 +14,7 @@ int number(int& n);
 typedef struct Item
 {
 	int key; // ключ >0
-	int busy; //поле зан€тости 0\1
+	int busy; //поле зан€тости 0\1\-1
 	char info[szinfo+1]; //информаци€
 }Item;
 
@@ -22,12 +22,12 @@ class Hash
 {
 private:
 	
-	int mas1[sztab] = { 17,21,34,55,67,78,3,42,39,8,10,46,82,5,99 };
-	const char* mas2[sztab] = { "abcde","fghij","klmno","pqrst", "uvwxy","z0123", "45678","9ABCD", "EFGHI","JKLMN", "OPQRS","TUVWX", "YZ987","65432","10abc" };
+	//int mas1[sztab] = { 17,21,34,55,67,78,3,42,39,8,10,46,82,5,99 };
+	//const char* mas2[sztab] = { "abcde","fghij","klmno","pqrst", "uvwxy","z0123", "45678","9ABCD", "EFGHI","JKLMN", "OPQRS","TUVWX", "YZ987","65432","10abc" };
 	
 	int N; //количество зан€тых элементов
 	struct Item tab[sztab]; //массив элементов
-	void clean();//чистка таблицы от Уудаленных элементовФ Ц реорганизаци€ таблицы.
+	
 
 public:
 	struct Item pre;
