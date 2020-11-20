@@ -14,7 +14,7 @@ int number(int& n);
 typedef struct Item
 {
 	int key; // ключ >0
-	int busy; //поле зан€тости 0\1
+	int busy; //поле зан€тости 0\1\-1
 	char info[szinfo+1]; //информаци€
 }Item;
 
@@ -22,12 +22,11 @@ class Hash
 {
 private:
 	
-	int mas1[sztab] = { 17,21,34,55,67,78,3,42,39,8,10,46,82,5,99 };
-	const char* mas2[sztab] = { "abcde","fghij","klmno","pqrst", "uvwxy","z0123", "45678","9ABCD", "EFGHI","JKLMN", "OPQRS","TUVWX", "YZ987","65432","10abc" };
+	//int mas1[sztab] = { 17,21,34,55,67,78,3,42,39,8,10,46,82,5,99 };
+	//const char* mas2[sztab] = { "abcde","fghij","klmno","pqrst", "uvwxy","z0123", "45678","9ABCD", "EFGHI","JKLMN", "OPQRS","TUVWX", "YZ987","65432","10abc" };
 
 	int N; //количество зан€тых элементов
 	struct Item tab[sztab]; //массив элементов
-	Hash reorg(); //реорганизаци€
 public:
 	Hash(); //пустой конструктор дл€ инициализации экземпл€ров и массивов экземпл€ров класса(таблицы) по умолчанию;
 	Hash(int count); //создание экземпл€ров класса(таблицы) с инициализацией заданным количеством элементов из массива ключей и информации;
@@ -39,5 +38,6 @@ public:
 	struct Item getinfo(int k);// выборка информации из таблицы по заданному ключу(дл€ диалоговой программы)
 	void del(int k); //удаление элемента из таблицы(с отметкой в поле зан€тости) по ключу
 	struct Item getEl(struct Item& el);//ввод элемента структуры из входного потока
+	Hash reorg(); //реорганизаци€
 };
 

@@ -47,6 +47,7 @@
             std::cout << "2. Find info\n";
             std::cout << "3. Delete item\n";
             std::cout << "4. Print table\n";
+            std::cout << "5. Reorganization of table\n";
             std::cout << "0. Exit\n";
             number(dia);
             switch (dia)
@@ -84,6 +85,14 @@
             case 4:
                 try {
                     h.printHash();
+                }
+                catch (std::exception& ex) {
+                    std::cout << ex.what() << std::endl;
+                }
+                break;
+            case 5:
+                try {
+                    h = h.reorg();
                 }
                 catch (std::exception& ex) {
                     std::cout << ex.what() << std::endl;
