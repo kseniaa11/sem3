@@ -1,115 +1,114 @@
-﻿// laba3.cpp : Этот файл содержит функцию "main". Здесь начинается и заканчивается выполнение программы.
-//
+﻿
 
-#include "Hash-b.h"
+#include "C:\Users\urkae\Desktop\лабараторные\cем3\githab\laba3-b\Hash-b.h"
 #include <cstring>
 #include <stdio.h>
 #include <iostream>
 
 
 
-    int main()
+int main()
+{
+    Hash h;
+    int dia = 0; int count;
+    while ((dia != 1) && (dia != 2))
     {
-        Hash h;
-        int dia = 0;int count;
-        while ((dia != 1) && (dia != 2))
+        std::cout << "Do you want to\n";
+        std::cout << "1.Create empty table\n";
+        std::cout << "2.Create n random item\n";
+        number(dia);
+        switch (dia)
         {
-            std::cout << "Do you want to\n";
-            std::cout << "1.Create empty table\n";
-            std::cout << "2.Create n random item\n";
-            number(dia);
-            switch (dia) 
-            {
-                case 1: 
-                    break;
-                case 2:
-                    std::cout << "Enter count of item:\n";
-                    number(count);
-                    try {
-                        h = Hash(count);
-                    }
-                    catch (std::exception& ex) {
-                        std::cout << ex.what() << std::endl;
-                    }
-                    break;
-                default:
-                    std::cout << "Wrong parameter, repeat\n";
-                    dia = -1;
-                    break;
+        case 1:
+            break;
+        case 2:
+            std::cout << "Enter count of item:\n";
+            number(count);
+            try {
+                h = Hash(count);
             }
-        }
-        int key;
-        
-        while (dia != 0)
-        {
-            std::cout << "Enter the action:\n";
-            std::cout << "1. Add item\n";
-            std::cout << "2. Find info\n";
-            std::cout << "3. Delete item\n";
-            std::cout << "4. Print table\n";
-            std::cout << "5. Reorganization\n";
-            std::cout << "0. Exit\n";
-            number(dia);
-            switch (dia)
-            {
-            case 1:
-                std::cin >> h;
-                try {
-                    h += h.pre;
-                }
-                catch (std::exception& ex) {
-                    std::cout << ex.what() << std::endl;
-                }
-                break;
-            case 2:
-                std::cout << "Enter the key:\n";
-                number(key);
-                try {
-                    std::cout << "Item#" << key << " Info:" << h[key].info << "\n";
-                }
-                catch (std::exception& ex) {
-                    std::cout << ex.what() << std::endl;
-                }
-                break;
-            case 3:
-                std::cout << "Enter the key:\n";
-                number(key);
-                try {
-                    h -= key;
-                }
-                catch (std::exception& ex) {
-                    std::cout << ex.what() << std::endl;
-                }
-                break;
-            case 4:
-                try {
-                    std::cout << h;
-                }
-                catch (std::exception& ex) {
-                    std::cout << ex.what() << std::endl;
-                }
-                break;
-            case 5:
-                try {
-                    h = h.reorg;
-                }
-                catch (std::exception& ex) {
-                    std::cout << ex.what() << std::endl;
-                }
-                break;
-            case 0:
-                break;
-            default:
-                std::cout << "Wrong parameter, repeat\n";
-                dia = -1;
-                break;
+            catch (std::exception& ex) {
+                std::cout << ex.what() << std::endl;
             }
+            break;
+        default:
+            std::cout << "Wrong parameter, repeat\n";
+            dia = -1;
+            break;
         }
-
-        
-        system("pause");
-        return 1;
     }
+    int key;
+
+    while (dia != 0)
+    {
+        std::cout << "Enter the action:\n";
+        std::cout << "1. Add item\n";
+        std::cout << "2. Find info\n";
+        std::cout << "3. Delete item\n";
+        std::cout << "4. Print table\n";
+        std::cout << "5. Reorganization\n";
+        std::cout << "0. Exit\n";
+        number(dia);
+        switch (dia)
+        {
+        case 1:
+            std::cin >> h;
+            try {
+                h += h.pre;
+            }
+            catch (std::exception& ex) {
+                std::cout << ex.what() << std::endl;
+            }
+            break;
+        case 2:
+            std::cout << "Enter the key:\n";
+            number(key);
+            try {
+                std::cout << "Item#" << key << " Info:" << h[key].info << "\n";
+            }
+            catch (std::exception& ex) {
+                std::cout << ex.what() << std::endl;
+            }
+            break;
+        case 3:
+            std::cout << "Enter the key:\n";
+            number(key);
+            try {
+                h -= key;
+            }
+            catch (std::exception& ex) {
+                std::cout << ex.what() << std::endl;
+            }
+            break;
+        case 4:
+            try {
+                std::cout << h;
+            }
+            catch (std::exception& ex) {
+                std::cout << ex.what() << std::endl;
+            }
+            break;
+        case 5:
+            try {
+                h = h.reorg();
+            }
+            catch (std::exception& ex) {
+                std::cout << ex.what() << std::endl;
+            }
+            break;
+        case 0:
+            break;
+        default:
+            std::cout << "Wrong parameter, repeat\n";
+            dia = -1;
+            break;
+        }
+    }
+
+
+    system("pause");
+    return 1;
+}
 
 /* Вариант 18
 
@@ -117,7 +116,7 @@
     Состояние класса -
     Таблица представляется в виде вектора(массива), состоящего из элементов.
     Элемент таблицы состоит из ключа(тип int), поля занятости(тип int) и информации(тип char[] фиксированной дли - ны).
-    Для описания элемента таблицы целесообразно использовать структуру.Память под массив выделяется статически, во время компиляции, 
+    Для описания элемента таблицы целесообразно использовать структуру.Память под массив выделяется статически, во время компиляции,
     и задается массивом фиксированного размера.
     Преобразование ключа в индекс выполняется функцией хеширования.Элементы перемешиваются методом сложения с константой.
 Протокол класса
@@ -133,13 +132,13 @@
     • ==выборка информации из таблицы по заданному ключу(с помощью перегруженного оператора[]);
     • ==удаление элемента из таблицы(с отметкой в поле занятости) по ключу(с помощью пере - груженного оператора -= );
 • чистка таблицы от “удаленных элементов” – реорганизация таблицы.
-2. Проектирование класса рекомендуется начать с представления состояния класса, 
+2. Проектирование класса рекомендуется начать с представления состояния класса,
     учитывающего заданные операции, а затем реализации конструкторов и перегруженного оператора вывода.
-    Для отладки и исчерпывающего тестирования других методов разработанного класса реализовать диалоговую программу, 
+    Для отладки и исчерпывающего тестирования других методов разработанного класса реализовать диалоговую программу,
     которая позволяет вводить параметры, отлаживаемых методов.
     Для обработки ошибочных ситуаций использовать механизм исключительных ситуаций.
-3. Повторить разработку класса при условии, что память под строку символов в элементе таблицы и 
-    массив структур необходимой длины выделяется динамически, во время выполнения про - граммы(с помощью оператора new; 
+3. Повторить разработку класса при условии, что память под строку символов в элементе таблицы и
+    массив структур необходимой длины выделяется динамически, во время выполнения про - граммы(с помощью оператора new;
     память задается указателем на char в структуре и указателем на структуру в состоянии класса).
 Дополнить интерфейс класса следующими возможностями :
     • память под данные поля информации выделять динамически с помощью оператора new;

@@ -1,33 +1,33 @@
-#include "Hash-b.h"
+#include "C:\Users\urkae\Desktop\лабараторные\cем3\githab\laba3-b\Hash-b.h"
 #include <stdio.h>
 #include <iostream>
 #include <time.h>
 
 
 
-	int number(int& n)
+int number(int& n)
+{
+	using std::cin;
+	cin >> n;
+	while (!cin.good())
 	{
-		using std::cin;
+		cin.clear();
+		cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		cin.clear();
 		cin >> n;
-		while (!cin.good())
-		{
-			cin.clear();
-			cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-			cin.clear();
-			cin >> n;
-		}
-		return 1;
 	}
+	return 1;
+};
 
 
 	Hash::Hash() //пустой конструктор дл€ инициализации экземпл€ров и массивов экземпл€ров класса(таблицы) по умолчанию;
 	{
 		for (int i = 0; i < sztab; i++)
-		{ 
+		{
 			tab[i] = conItem();
 		}
 		N = 0;
-	}
+	};
 
 	Hash::Hash(int count) //создание экземпл€ров класса(таблицы) с инициализацией заданным количеством элементов из массива ключей и информации;
 	{
@@ -43,7 +43,7 @@
 		if (count > sztab && count < 0)
 			throw std::runtime_error("Invalid quantity of vector");
 		int m, l;
-		
+
 		while (N < count)
 		{
 			srand(time(0));
@@ -56,12 +56,14 @@
 			try {
 				*this += dob;
 			}
-				catch (std::exception& ex) {
+			catch (std::exception& ex) {
+			}
 		}
-	}
+
+	};
 
 
-	std::istream& operator >> (std::istream& c, Hash& el) //ввод элемента таблицы с входного потока 
+	std::istream& operator >> (std::istream & c, Hash & el) //ввод элемента таблицы с входного потока 
 	{
 		std::cout << "Enter the key:\n";
 		number(el.pre.key);
@@ -83,7 +85,7 @@
 
 	}
 
-	std::ostream& operator << (std::ostream& c, const Hash& h) // вывод таблицы в выходной поток
+	std::ostream& operator << (std::ostream & c, const Hash & h) // вывод таблицы в выходной поток
 	{
 		c << "Busy\tKey\tInfo\n";
 		if (h.N == 0)
@@ -96,29 +98,29 @@
 	int Hash::operator ()(int k) //поиск элемента таблицы по ключу
 	{
 		//std::cout << " N="<<N;
-		
-			int it = 0; //количество итераций
-			int j = k % sztab;
-			
-			if (tab[j].busy == 1)
+
+		int it = 0; //количество итераций
+		int j = k % sztab;
+
+		if (tab[j].busy == 1)
+		{
+			while ((tab[j].busy != 0) && (it < sztab))
 			{
-				while ((tab[j].busy != 0) && (it < sztab))
-				{
-					//std::cout << " FLAG#" << it << " item#" << tab[j].key;
-					if ((tab[j].busy == 1) && (tab[j].key == k))
-						return j;
-					j = (j + step);
-					j = j % sztab;
-					it = it + 1;
-				}
+				//std::cout << " FLAG#" << it << " item#" << tab[j].key;
+				if ((tab[j].busy == 1) && (tab[j].key == k))
+					return j;
+				j = (j + step);
+				j = j % sztab;
+				it = it + 1;
 			}
+		}
 		return -1;
 	}
 
 	Hash& Hash::operator +=(struct Item NOV) //добавление элемента в таблицу
 	{
 		int l = (*this)(NOV.key);
-		if ( l > -1)
+		if (l > -1)
 			throw std::runtime_error("This item already exists");
 
 		int it = 0; //количество итераций
@@ -129,14 +131,14 @@
 			j = (j + step) % sztab;
 			it = it + 1;
 		}
-		 
+
 		if (it >= sztab)
 			throw std::runtime_error("Vector overflow");
 		tab[j].key = NOV.key;
 		tab[j].busy = 1;
-		for (int s=0;s<szinfo;s++)
+		for (int s = 0; s < szinfo; s++)
 			tab[j].info[s] = NOV.info[s];
-		
+
 		N = N + 1;
 		return *this;
 	}
