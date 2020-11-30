@@ -1,11 +1,11 @@
 #include <cstring>
 #include <stdio.h>
 #include <iostream>
+#include <math.h>
 
-
-const int szinfo = 5; //макс размер инфы
-const int sztab = 15; //размер таблицы
-const int step = 4; //шаг перемешивани€
+const int szinfo = 5;
+const int MAX = 100; //
+const int step = 4; //
 
 
 int number(int& n);
@@ -15,7 +15,7 @@ typedef struct Item
 {
 	int key; // ключ >0
 	int busy; //поле зан€тости 0\1\-1
-	char info[szinfo+1]; //информаци€
+	char* info; //информаци€
 }Item;
 
 class Hash
@@ -24,23 +24,27 @@ private:
 	
 	//int mas1[sztab] = { 17,21,34,55,67,78,3,42,39,8,10,46,82,5,99 };
 	//const char* mas2[sztab] = { "abcde","fghij","klmno","pqrst", "uvwxy","z0123", "45678","9ABCD", "EFGHI","JKLMN", "OPQRS","TUVWX", "YZ987","65432","10abc" };
-
-	int N; //количество зан€тых элементов
-	struct Item tab[sztab]; //массив элементов
 	
+	int N; //количество зан€тых элементов
+	
+	int len; //размер таблицы в конкретный момент
+	
+
 public:
+	struct Item pre;
+	struct Item* tab; //массив элементов
+	
 	Hash(); //пустой конструктор дл€ инициализации экземпл€ров и массивов экземпл€ров класса(таблицы) по умолчанию;
 	Hash(int count); //создание экземпл€ров класса(таблицы) с инициализацией заданным количеством элементов из массива ключей и информации;
-	~Hash() {};// деструктор
-	int getN();
-	struct Item getI(int in);
+	~Hash();// деструктор
+	friend std::istream& operator >> (std::istream& c, Hash& el); //ввод элемента таблицы с входного потока 
 	struct Item conItem(); //создание экземпл€ров структуры(элемента таблицы) с инициализацией начальным состо€нием по умолчанию;
-	void printHash(); // вывод таблицы в выходной поток
-	int find(int k); //поиск элемента таблицы по ключу(дл€ других функций)
-	void add(int k, const char* inf); //добавление элемента в таблицу
-	struct Item getinfo(int k);// выборка информации из таблицы по заданному ключу(дл€ диалоговой программы)
-	void del(int k); //удаление элемента из таблицы(с отметкой в поле зан€тости) по ключу
-	struct Item getEl(struct Item& el);//ввод элемента структуры из входного потока
+	friend std::ostream& operator << (std::ostream& c, const Hash& h); // вывод таблицы в выходной поток
+	int operator () (int k); //поиск элемента таблицы по ключу(дл€ других функций)
+	Hash& operator +=(struct Item s); //добавление элемента в таблицу
+	struct Item operator [](int k);// выборка информации из таблицы по заданному ключу(дл€ диалоговой программы)
+	void operator -=(int k); //удаление элемента из таблицы(с отметкой в поле зан€тости) по ключу
 	Hash reorg(); //реорганизаци€
+
 };
 

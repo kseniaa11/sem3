@@ -40,7 +40,7 @@
 		}
 		N = 0;
 
-		if (count > sztab || count < 0)
+		if (count > sztab || count <= 0)
 			throw std::runtime_error("Invalid parametr");
 		int m, l;
 		while (N < count)
@@ -56,6 +56,15 @@
 		}
 	}
 
+	int Hash::getN()
+	{
+		return N;
+	}
+
+	struct Item Hash::getI(int in)
+	{
+		return tab[in];
+	}
 	struct Item Hash::conItem() //создание экземпл€ров структуры(элемента таблицы) с инициализацией начальным состо€нием по умолчанию;
 	{
 		struct Item el;
