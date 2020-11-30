@@ -46,25 +46,28 @@
 		}
 		N = 0;
 
-		int m, l;
+		int m = 1, l = 1;
 		struct Item dob = conItem();
 		while (N < count)
 		{
-			srand(time(0));
-			m = 1 + rand() % MAX;
-			l = 1 + rand() % szinfo;
+			//srand(time(0));
+			m = m*3;
+			l = l+3;
 			for (int i = 0; i < l; ++i)
 				dob.info[i] = 'a'; //коды латиницы
 			dob.info[l] = '\0';
 			
 			dob.key = m;
+
 			try {
 				*this += dob;
 			}
 			catch (std::exception& ex) {
 			}
+			std::cout << " N:" << N;
+			dob = conItem();
 		}
-		
+		N = count;
 	}
 
 	Hash::~Hash()
@@ -79,6 +82,7 @@
 		delete [] tab;
 	}
 
+	
 
 	std::istream& operator >> (std::istream& c, Hash& h) //ввод элемента таблицы с входного потока 
 	{
@@ -121,7 +125,7 @@
 		for (int i = 0; i < h.len; i++)
 		{
 			c << h.tab[i].busy << "\t" << h.tab[i].key << "\t"; 
-			for (int j = 0; j < 2; j++)
+			for (int j = 0; j < strlen(h.tab[i].info); j++)
 				c << h.tab[i].info[j];
 				
 			c << "\n";
@@ -175,12 +179,13 @@
 		tab[j].key = NOV.key;
 		tab[j].busy = 1;
 		std::cout << "\nMMMMM[2]\n";
-		for (int i = 0; i < strlen(tab[j].info); i++)
+		for (int i = 0; i < strlen(NOV.info); i++)
 			tab[j].info[i] = NOV.info[i];
 		std::cout << "\nMMMMM[3]\n";
 		tab[j].info[strlen(NOV.info)] = '\0';
 		std::cout << "\nMMMMM[4]\n";
 		N = N + 1;
+		
 		return *this;
 	}
 
@@ -204,7 +209,7 @@
 		return;
 	}
 
-	Hash Hash::reorg()//чистка таблицы от Уудаленных элементовФ Ц реорганизаци€ таблицы.
+	Hash& Hash::reorg()//чистка таблицы от Уудаленных элементовФ Ц реорганизаци€ таблицы.
 	{
 		if (N == 0)
 			throw std::runtime_error("There aren`t items");
