@@ -1,19 +1,18 @@
-//
+///
 //  Charset.hpp
 //  Lab_3_29
 //
 //  Created by Alyona Borushnova on 15.10.2020.
 //
 
-#ifndef Charset_h
-#define Charset_h
+#define charset_h
 
 #include <stdio.h>
 #include <iostream>
 
 namespace ThirdLab3 {
 
-    //   #define MAX_SIZE 1000
+       #define MAX_SIZE 1000
 
     class CharSet {
     private:
@@ -34,6 +33,7 @@ namespace ThirdLab3 {
         CharSet& Injection(char symbol[1]);//вставка нового элемента
         CharSet Addition(CharSet& charset);//объединение множеств
         ~CharSet();
+        int getcar();
 
         bool Existence(char symbol[1]) const;
 
@@ -49,4 +49,5 @@ namespace ThirdLab3 {
 
     char* DeleteIdenticalChar(const char* line);
 }
-#endif /* Charset_hpp */
+
+

@@ -11,7 +11,8 @@
     int main()
     {
         Hash h;
-        int dia = 0;int count;
+        int dia = 0;
+        int count;
         while ((dia != 1) && (dia != 2))
         {
             std::cout << "Do you want to\n";
@@ -26,7 +27,8 @@
                     std::cout << "Enter count of item:\n";
                     number(count);
                     try {
-                        h = Hash(count);
+                        Hash* h1 = new Hash(count);
+                        h = *h1;
                     }
                     catch (std::exception& ex) {
                         std::cout << ex.what() << std::endl;
@@ -97,7 +99,7 @@
                 break;
             case 5:
                 try {
-                    h = h.reorg();
+                    h.reorg(h);
                 }
                 catch (std::exception& ex) {
                     std::cout << ex.what() << std::endl;

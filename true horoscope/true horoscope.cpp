@@ -1,4 +1,4 @@
-﻿//
+﻿
 //  main.cpp
 //  Lab_3_29
 //
@@ -6,34 +6,51 @@
 //
 
 #include <iostream>
+#include <cstring>
 #include "charset.h"
 
 int main(int argc, const char* argv[]) {
 
-    ThirdLab3::CharSet c1(4);
-    ThirdLab3::CharSet c2(3);
-    char* line = new char [2];
-    for (int i = 0; i < 2; i++)
-        line[i] = 'a';
-    line[2] = '\0';
-    ThirdLab3::CharSet c3(line);
-    ThirdLab3::CharSet c4('h');
-    c2 += 'a';
-    //    ThirdLab3::CharSet c3 = c3.Subtraction(c1, c2);
-    //    ThirdLab3::CharSet c3(10);
-    //    ThirdLab3::CharSet c4;
-    //    std::cin >> c4;
-    //char* symbol = "n";
-    //    bool b = c4.Existence(symbol, c4);
-    //    ThirdLab3::CharSet * f = c1.Subtraction(c2);
-    //    ThirdLab3::CharSet * a = c1.intersection(c2);
-        //char c = "s";
-    //    ThirdLab3::CharSet * f = c1.Addition(c2);
-    ThirdLab3::CharSet nw = c1 - c2;
-      //  nw.Injection(symbol);
-    std::cout << c1;
-    std::cout << c2;
-        std::cout << nw;
+    
+
+    char* n1 = new char[100];
+    char* n2 = new char[100];
+   
+
+    std::cout << "Enter first name: ";
+    std::cin >> n1;
+    std::cout << "Enter second name: ";
+    std::cin >> n2;
+
+    ThirdLab3::CharSet Name1(n1);
+    ThirdLab3::CharSet Name2(n2);
+
+    int car;
+    if ((Name1.getcar()) > (Name2.getcar()))
+        car = Name1.getcar();
+    else
+        car = Name2.getcar();
+
+    int sumcar = Name1.getcar() + Name2.getcar();
+
+   ThirdLab3::CharSet inter = Name1.Intersection(Name2);
+
+   
+
+   double math = (double) (inter.getcar()) /(double) car;
+    std::cout << "\n% of common: " << math*100 << "%\n";
+
+  
+    ThirdLab3::CharSet* sub = Name1.Subtraction(Name2);
+
+
+    math = (double)((*sub).getcar()) / (double)sumcar;
+    std::cout << "% of arguement: " << math * 100 << "%\n";
+
+
+std::cout<<"Name1: "<<Name1<<"\nName2: "<<Name2<<"\nIntersection: "<< inter << "\nSubsription: " << *sub;
+
+    system("pause");
 
     return 0;
 

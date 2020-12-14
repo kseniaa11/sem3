@@ -23,62 +23,78 @@
 
 	Hash::Hash() //пустой конструктор дл€ инициализации экземпл€ров и массивов экземпл€ров класса(таблицы) по умолчанию;
 	{
-		len = 1;
+		len = MAX;
 		tab = new struct Item [len];
-		tab[0] = conItem();
+		for(int i=0;i<MAX;i++)
+			conItem(tab[i]);
 		N = 0;
 	}
 
 	Hash::Hash(int count) //создание экземпл€ров класса(таблицы) с инициализацией заданным количеством элементов из массива ключей и информации
 	{
 		
-		int c2 = count;
-		len = 1;
-		while (c2 > 1)
-		{
-			c2 = c2 / 2;
-			len = len * 2;
-		}
+		
+		len = MAX;
+		
 		(*this).tab = new struct Item[len];
 		for (int i = 0; i < len; i++)
 		{
-			tab[i] = conItem();
+			 conItem(tab[i]);
 		}
 		N = 0;
 
-		int m = 1, l = 1;
-		struct Item dob = conItem();
-		while (N < count)
+		int m = 1;
+		struct Item dob;
+		conItem(dob);
+		//std::cout << " count:" << count;
+		for (int i = 0; i < szinfo; i++)
+				dob.info[i] = '\0';
+			dob.info[szinfo] = '\0';
+		for(int t=0;t<count;t++)
 		{
+			dob.info[t] = 'k';
 			//srand(time(0));
-			m = m*3;
-			l = l+3;
-			for (int i = 0; i < l; ++i)
-				dob.info[i] = 'a'; //коды латиницы
-			dob.info[l] = '\0';
+			m = m*2;
 			
-			dob.key = m;
+			
+			dob.key = t+m;
 
 			try {
 				*this += dob;
 			}
 			catch (std::exception& ex) {
 			}
-			std::cout << " N:" << N;
-			dob = conItem();
+			//std::cout << " N:" << N;
+		
 		}
 		N = count;
 	}
 
+	Hash::Hash (const Hash& h)
+	{
+		N = h.N;
+		len = h.len;
+		tab = new struct Item[len];
+		for (int i = 0; i < len; i++)
+		{
+			tab[i].busy = h.tab[i].busy;
+			tab[i].key = h.tab[i].key;
+			for (int u=0;u<szinfo;u++)
+				tab[i].info[u] = h.tab[i].info[u];
+			tab[i].info[szinfo] = '\0';
+			
+		}
+	}
+
 	Hash::~Hash()
 	{
-		std::cout << "\ndie N len"<<N<<len;
-		//for (int i = 0; i < len; i++)
-		//{
-		//	if (tab[i].info != nullptr) {
-		//		delete[] tab[i].info;
-		//	}
-		//}
+		std::cout << "\ndie N len "<<N<<len;
+		for (int i = 0; i < len; i++)
+		{
+			if (tab[i].info != nullptr) {
+				delete[] tab[i].info;
+			}
+		}
 		delete [] tab;
 	}
 
@@ -86,7 +102,7 @@
 
 	std::istream& operator >> (std::istream& c, Hash& h) //ввод элемента таблицы с входного потока 
 	{
-		h.pre = h.conItem();
+		 h.conItem(h.pre);
 		std::cout << "Enter the key:\n";
 		number(h.pre.key);
 		std::cout << "Enter the information:\n";
@@ -104,16 +120,15 @@
 		return c;
 	}
 
-	struct Item Hash::conItem() //создание экземпл€ров структуры(элемента таблицы) с инициализацией начальным состо€нием по умолчанию;
+	void Hash::conItem(struct Item& I) //создание экземпл€ров структуры(элемента таблицы) с инициализацией начальным состо€нием по умолчанию;
 	{
-		struct Item el;
-		el.key = -1;
-		el.busy = 0;
-		el.info = new char[MAX+1];
-		for (int i = 0; i < MAX; i++)
-			el.info[i] = ' ';
-		el.info[MAX] = '\0';
-		return el;
+		I.key = -1;
+		I.busy = 0;
+		I.info = new char[szinfo+1];
+		for (int i = 0; i < szinfo; i++)
+			I.info[i] ='f';
+		I.info[szinfo] = '\0';
+		return;
 
 	}
 
@@ -126,9 +141,14 @@
 		{
 			c << h.tab[i].busy << "\t" << h.tab[i].key << "\t"; 
 			for (int j = 0; j < strlen(h.tab[i].info); j++)
+			{
+				if (h.tab[i].info[j] == '\0')
+					break;
 				c << h.tab[i].info[j];
+			}
 				
 			c << "\n";
+			
 		}
 		return c;
 	}
@@ -168,9 +188,9 @@
 
 		int j = NOV.key % len;
 
-		while ((tab[j].busy == 1) && (it < len))
+		while ((tab[j].busy == 1) && (it < MAX))
 		{
-			j = (j + step) % len;
+			j = (j + step) % MAX;
 			it = it + 1;
 		}	
 		if (it >= len)
@@ -178,12 +198,20 @@
 		 
 		tab[j].key = NOV.key;
 		tab[j].busy = 1;
-		std::cout << "\nMMMMM[2]\n";
-		for (int i = 0; i < strlen(NOV.info); i++)
+		//std::cout << "\nMMMMM[2]\n";
+		int i = 0;
+		//std::cout << " i1:" << tab[j].info;		
+		//67yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy,u=.ystd::cout << " i2:" << NOV.info;
+
+		while ((tab[j].info[i] != '\0') && (NOV.info[i] != '\0'))
+		{
 			tab[j].info[i] = NOV.info[i];
-		std::cout << "\nMMMMM[3]\n";
-		tab[j].info[strlen(NOV.info)] = '\0';
-		std::cout << "\nMMMMM[4]\n";
+			i++;
+		}
+		tab[j].info[i] = '\0';
+		//std::cout << "\nMMMMM[3]\n";
+		//tab[j].info[strlen(NOV.info)] = '\0';
+		//std::cout << "\nMMMMM[4]\n";
 		N = N + 1;
 		
 		return *this;
@@ -191,11 +219,11 @@
 
 	struct Item Hash::operator [](int k)// выборка информации из таблицы по заданному ключу
 	{
-		int index = (*this)(k);
-		if (index == -1)
-			throw std::runtime_error("This item doesn`t exist");
-		else
-			return tab[index];
+int index = (*this)(k);
+if (index == -1)
+throw std::runtime_error("This item doesn`t exist");
+else
+return tab[index];
 
 	}
 
@@ -209,54 +237,103 @@
 		return;
 	}
 
-	Hash& Hash::reorg()//чистка таблицы от Уудаленных элементовФ Ц реорганизаци€ таблицы.
+	Hash& Hash::operator = (Hash& h)
+	{
+		N = h.N;
+		len = h.len;
+		//tab = new struct Item[len];
+
+		for (int i = 0; i < MAX; i++)
+		{
+			this->tab[i].busy = h.tab[i].busy;
+			this->tab[i].key = h.tab[i].key;
+			for (int t = 0; t < szinfo; t++)
+			{
+				this->tab[i].info[t] = h.tab[i].info[t];
+			}
+			this->tab[i].info[szinfo] = '\0';
+		}
+
+		return *this;
+	}
+
+	struct Item& Hash::operator = (struct Item& I)
+	{
+		struct Item el;
+		conItem(el);
+		el.busy = I.busy;
+		el.key = I.key;
+		int j = 0;
+
+		for (int j = 0; j < szinfo; j++)
+			el.info[j] = I.info[j];
+		el.info[szinfo] = '\0';
+
+		//while ((el.info[j] != '\0') && (I.info[j] != '\0'))
+		//{
+		//	el.info[j] = I.info[j];
+		//	j++;
+		//}
+		//el.info[strlen(I.info)] = '\0';
+
+		return el;
+	}
+
+	void Hash::reorg(Hash& h)//чистка таблицы от Уудаленных элементовФ Ц реорганизаци€ таблицы.
 	{
 		if (N == 0)
-			throw std::runtime_error("There aren`t items");
+		{
+			for (int i = 0; i < MAX; i++)
+				conItem(tab[i]);
+			return;
+		}
 
 		Hash nov;
-		std::cout << "N: " << N << "   len: " << len << "  ";
-		
-		if (N == len)
-			nov.len = 2 * len;
-		else
-			nov.len = len;
-		std::cout << "N: " << N << "   novlen: " << nov.len << "  ";
-		nov.tab = new struct Item[nov.len];
-		std::cout << "\na\n";
-		for (int i = 0; i < nov.len; i++)
-		{
-			nov.tab[i] = conItem();
-		}
-		std::cout << "\naa\n";
-		//struct Item dob = conItem();
-		std::cout << "\naaa\n";
-		int i = 0;
-		while (i < len)
-		{
-			if (tab[i].busy == 1)
-			{
-				
-				//dob.key = tab[i].key;
-				//for (int j = 0; j < strlen(tab[i].info); j++)
-				//	dob.info[j] = tab[i].info[j];
-				//dob.info[strlen(tab[i].info)] = '\0';
+		//std::cout << "N: " << h.N << "   len: " << h.len << "  ";
 
-				std::cout << "\nMMMMM\n";
+		//std::cout << "\na\n";
+
+		//std::cout << "\naa\n";
+		struct Item dob;
+
+		//std::cout << "\naaa\n";
+		int i = 0;
+		while (i < h.len)
+		{
+			if (h.tab[i].busy == 1)
+			{
+				conItem(dob);
+				dob.key = tab[i].key;
+				for (int s = 0; s < szinfo; s++)
+					dob.info[s] = tab[i].info[s];
+				dob.info[szinfo] = '\0';
+
+				//std::cout << "\nMMMMM\n";
 				try {
-					//nov += dob;
-					nov += tab[i];
+					nov += dob;
 				}
 				catch (std::exception& ex) {
 				}
-				std::cout << "\nMMMMM[5]?\n";
-				
+				//std::cout << "\nMMMMM[5]?\n";
+
 			}
 			i = i + 1;
 		}
+		this->N = nov.N;
 		
-		std::cout << "\naayjl\n";
-		return nov;
+		for(int i = 0; i < MAX; i++)
+		{
+			this->tab[i].busy = nov.tab[i].busy;
+			this->tab[i].key = nov.tab[i].key;
+			for (int t = 0; t < szinfo; t++)
+			{
+				this->tab[i].info[t] = nov.tab[i].info[t];
+			}
+			this->tab[i].info[szinfo] = '\0';
+		}
+
+		//std::cout << "\naayjl\n";
+		return;
 	}
 
 

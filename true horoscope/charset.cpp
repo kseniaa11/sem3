@@ -1,4 +1,3 @@
-#include "charset.h"
 
 //
 //  Charset.cpp
@@ -7,6 +6,7 @@
 //  Created by Alyona Borushnova on 15.10.2020.
 //
 
+#include "charset.h"
 #include <iostream>
 
 namespace ThirdLab3 {
@@ -29,7 +29,7 @@ namespace ThirdLab3 {
 
     char* DeleteIdenticalChar(const char* line) {  //работает
         // удаление повторяющихся
-        int n = (int)strlen(line);
+        int n = (int)strlen(line)+1;
         const char* ptr1 = line;
         const char* ptr2 = line + 1;
         bool b = true;
@@ -68,7 +68,9 @@ namespace ThirdLab3 {
         // конструктор по строке
         char* line2 = DeleteIdenticalChar(line);
         //char* ptr = &line[0];
+        line2[strlen(line2)] = '\0';
         int cardinal = (int)strlen(line2);
+        //std::cout << "strlen " << cardinal;
         if (cardinal <= 100) {
             this->cardinality = cardinal;
             this->value = line2;
@@ -98,23 +100,28 @@ namespace ThirdLab3 {
         }
     }
 
-    //    std::istream& operator >> (std::istream& c, CharSet& charset){    // работает
-    //        int k = 0;
-    //        std::cout << "cordinality(1) : value(2) ?" << std::endl;
-    //        c >> k;
-    //        if (k == 1){
-    //            std::cout << "Enter cordinality -> ";
-    //            c >> k;
-    //            charset = ThirdLab3::CharSet(k);
-    //        }
-    //        else{
-    //            std::cout << "Enter value -> ";
-    //            char* nw = new char[MAX_SIZE];
-    //            c >> nw;
-    //            charset = ThirdLab3::CharSet(nw);
-    //        }
-    //        return c;
-    //    }
+    int CharSet::getcar()
+    {
+        return cardinality;
+    }
+
+        std::istream& operator >> (std::istream& c, CharSet& charset){    // работает
+            int k = 0;
+            std::cout << "cordinality(1) : value(2) ?" << std::endl;
+            c >> k;
+            if (k == 1){
+                std::cout << "Enter cordinality -> ";
+                c >> k;
+                charset = ThirdLab3::CharSet(k);
+            }
+            else{
+                std::cout << "Enter value -> ";
+                char* nw = new char[MAX_SIZE];
+                c >> nw;
+                charset = ThirdLab3::CharSet(nw);
+            }
+            return c;
+        }
 
 
 
@@ -159,28 +166,36 @@ namespace ThirdLab3 {
 
     CharSet CharSet::Intersection(CharSet& charset) {  // работает вроде
     // находит пересечение множеств
-        int cardinal = this->cardinality < charset.cardinality ? this->cardinality : charset.cardinality;
-        char* sub = new char[cardinal];
+        int cardinal;
+        if (this->cardinality < charset.cardinality)
+            cardinal = this->cardinality;
+        else
+            cardinal = charset.cardinality;
+       
+        char* sub = new char[cardinal+1];
+        for (int i = 0; i < cardinal; i++)
+            sub[i] = '\0';
         int j = 0;
         for (int i = 0; i < this->cardinality; ++i) {
             if (charset.Existence(&this->value[i])) {
                 sub[j] = this->value[i];
                 ++j;
-                ++cardinal;
+               // ++cardinal;
             }
         }
+        sub[cardinal] = '\0';
         ThirdLab3::CharSet ncs(sub);
         //ncs->value = sub;
         //ncs->cardinality = cardinal;
-        return ncs;
+        return sub;
     }
 
 
     CharSet* CharSet::Subtraction(CharSet& charset) { // работает
     // множество = разность множеств
         int cardinal = this->cardinality;
-        char* sub = new char[cardinal];
-        for (int i = 0; i < this->cardinality; i++) {
+        char* sub = new char[cardinal+1];
+        for (int i = 0; i < cardinal; i++) {
             sub[i] = '\0';
         }
         int j = 0;
@@ -192,7 +207,10 @@ namespace ThirdLab3 {
                 cardinal++;
             }
         }
+        sub[cardinal] = '\0';
         ThirdLab3::CharSet* ncs = new ThirdLab3::CharSet(sub);
+        //ncs->value = sub;
+        //ncs->cardinality = cardinal;
         //this->value = sub;
         return ncs;
     }
